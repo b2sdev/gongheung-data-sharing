@@ -27,5 +27,12 @@ Includes:
 }
 ```
 
+### Amazon API Gateway
+#### CORS configuration
+- Access-Control-Allow-Origin: https://website-name.com
+- Access-Control-Allow-Headers: Content-Type, X-Amz-Date, Authorization, X-Api-Key, X-Amz-Security-Token
+- Access-Control-Allow-Methods: GET, POST, OPTIONS
+
 ## Reference
+- https://docs.aws.amazon.com/AmazonS3/latest/userguide/PresignedUrlUploadObject.html
 - https://www.alter-solutions.com/articles/file-upload-amazon-s3-url
