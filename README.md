@@ -3,7 +3,7 @@
 This project is to uploading files to Amazon S3 for [gongheung.com](https://gongheung.com).
 
 Includes:
-- Client
+- [Client](https://gongheung-data-sharing.netlify.app/)
   - Get a S3 pre-signed url and upload a file to the S3 bucket
 - Server
   - Generate a pre-signed url on Amazon Lambda
