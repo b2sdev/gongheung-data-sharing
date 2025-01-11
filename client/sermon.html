@@ -80,8 +80,8 @@
                     content,
                     tags,
                     fileName,
-                    fileType,
-                    file: base64File,
+                    // fileType,
+                    // file: base64File,
                 };
 
                 try {
@@ -93,8 +93,40 @@
                         body: JSON.stringify(payload),
                     });
 
-                    const result = await response.json();
-                    document.getElementById('message').innerText = result.message;
+                    response = await fetch('https://q85vdk8h6e.execute-api.ap-northeast-2.amazonaws.com/default/getS3PresignedUrls', {
+                        method: 'POST',
+                        body: JSON.stringify({
+                            date: date,
+                            fileNames: Array.from(filesToUpload).map(file => file.name)
+                        }),
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                    });
+
+                    const { uploadUrls } = await response.json();
+
+                    const uploadPromises = Array.from(filesToUpload).map((file, index) => {
+                        return fetch(uploadUrls[index], {
+                            method: 'PUT',
+                            body: file,
+                            headers: {
+                                'Content-Type': file.type, // Set the correct content type
+                            },
+                        }).then(response => {
+                            // Check if the response is OK (status code 200-299)
+                            if (!response.ok) {
+                                throw new Error(`Failed to upload ${file.name}: ${response.statusText}`);
+                            }
+                            return response; // Return the response for further processing if needed
+                        });
+                    });
+
+                    // Wait for all uploads to complete
+                    const responses = await Promise.all(uploadPromises);
+
+                    console.log('All files uploaded successfully.');
+                    document.getElementById('message').innerText = '모든 파일이 업로드되었어요.';
                 } catch (error) {
                     console.error('Error uploading files:', error);
                     document.getElementById('message').innerText = 'Error uploading files.';
