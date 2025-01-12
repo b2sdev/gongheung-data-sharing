@@ -93,7 +93,7 @@
                         body: JSON.stringify(payload),
                     });
 
-                    response = await fetch('https://q85vdk8h6e.execute-api.ap-northeast-2.amazonaws.com/default/getS3PresignedUrls', {
+                    const urlResponse = await fetch('https://q85vdk8h6e.execute-api.ap-northeast-2.amazonaws.com/default/getS3PresignedUrls', {
                         method: 'POST',
                         body: JSON.stringify({
                             date: date,
@@ -104,11 +104,11 @@
                         },
                     });
 
-                    if (!response.ok) {
+                    if (!urlResponse.ok) {
                         throw new Error('Pre-signed URL 획득 실패.');
                     }
 
-                    const { uploadUrls } = await response.json();
+                    const { uploadUrls } = await urlResponse.json();
 
                     const uploadResponse = await fetch(uploadUrls[0], {
                         method: 'PUT',
